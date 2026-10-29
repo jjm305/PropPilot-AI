@@ -24,7 +24,7 @@ main{max-width:1050px;margin:26px auto;padding:0 16px;display:grid;grid-template
 </style>
 </head>
 <body>
-<header><div><div class="brand">◈ PropPilot AI</div><div class="tag">Property assistant · Demo v0.2</div></div><span class="pill">DEMO DATA</span></header>
+<header><div><div class="brand">◈ PropPilot AI</div><div class="tag">Property assistant · Demo v0.3</div></div><span class="pill">DEMO DATA</span></header>
 <main>
 <section class="card">
   <div class="hero"><div><small>EXKLUSIVES WOHNEN · BAAR</small><h1>Villa Sonnenberg</h1><div>Beispielobjekt für den Prototyp</div></div></div>
@@ -61,10 +61,10 @@ let s=q.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"");
 if(/preis|kosten|kaufpreis|kostet|betrag/.test(s))return facts.price;
 if(/zimmer|raum|schlafzimmer|anzahl der zimmer/.test(s))return facts.rooms;
 if(/wohnflache|grundstuck|wie gross|wie groß|grosse|groesse|quadr(at|atmeter)|m²|qm/.test(s))return facts.area;
+if(/besichtig|termin|besuchen|besichtigungstermin/.test(s))return facts.visit;
+if(/parkplatz|parkplatze|stellplatz|stellplatze|garage|parkieren|auto|fahrzeug|abstellplatz|abstellflache/.test(s))return facts.parking;
 if(/pool|schwimm|bad/.test(s))return facts.pool;
 if(/sicht|aussicht|blick|berg|see/.test(s))return facts.view;
-if(/parkplatz|parkplatze|stellplatz|stellplatze|garage|parkieren|auto|fahrzeug|abstellplatz|abstellflache/.test(s))return facts.parking;
-if(/besichtig|termin|besuchen|besichtigungstermin/.test(s))return facts.visit;
 return "Dazu habe ich in den freigegebenen Demo-Objektdaten keine bestätigte Information. Ich kann die Frage für das Maklerteam notieren; bitte nutzen Sie für eine verbindliche Auskunft den direkten Kontakt zum Anbieter."}
 function ask(q){document.getElementById('question').value=q;send()}
 function send(){let el=document.getElementById('question'),q=el.value.trim();if(!q)return;add(q,'user');el.value='';setTimeout(()=>add(answer(q),'bot'),180)}
