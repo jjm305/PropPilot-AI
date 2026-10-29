@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PropPilot AI – Demo</title>
+<style>
+:root{--ink:#152b35;--muted:#61747d;--line:#dce5e8;--teal:#087f8c;--bg:#f3f7f8;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink)}
+header{background:#102e3a;color:white;padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:750;font-size:20px;letter-spacing:.2px}.tag{font-size:12px;color:#b8d9dd}
+main{max-width:1050px;margin:26px auto;padding:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:white;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 28px #173b4810}
+.hero{height:220px;background:linear-gradient(120deg,#214957,#91b4b4);display:flex;align-items:end;padding:22px;color:white}
+.hero small{display:block;opacity:.9}.hero h1{margin:3px 0;font-size:26px}
+.details{padding:20px}.price{font-size:25px;font-weight:750}.facts{display:flex;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:14px;margin:12px 0}
+.pill{background:#e7f4f4;color:#12616b;padding:5px 10px;border-radius:30px;font-size:12px;font-weight:650}
+.chathead{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.dot{width:9px;height:9px;background:#23a37c;border-radius:50%}.chatbody{height:350px;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px;background:#fbfdfd}
+.msg{max-width:88%;padding:11px 14px;border-radius:14px;font-size:14px;white-space:pre-wrap}.bot{background:#edf3f5;align-self:flex-start}.user{background:#d8f1ed;align-self:flex-end}
+.controls{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}input,button{font:inherit}input{min-width:0;flex:1;border:1px solid var(--line);border-radius:12px;padding:11px 12px}button{border:0;background:var(--teal);color:white;border-radius:12px;padding:11px 15px;cursor:pointer;font-weight:650}button:hover{filter:brightness(.94)}
+.quick{padding:0 14px 14px;display:flex;gap:7px;flex-wrap:wrap}.quick button{background:#eff6f6;color:#155b64;font-size:12px;padding:7px 10px}
+.form{padding:18px;border-top:1px solid var(--line);display:grid;gap:10px}.form h3{margin:0;font-size:16px}.form label{font-size:12px;color:var(--muted)}.form input{width:100%;flex:auto}.notice{max-width:1050px;margin:0 auto 24px;padding:0 16px;color:var(--muted);font-size:12px}
+@media(max-width:760px){main{grid-template-columns:1fr}.chatbody{height:300px}header{padding:15px}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">◈ PropPilot AI</div><div class="tag">Property assistant · Demo v0.1</div></div><span class="pill">DEMO DATA</span></header>
+<main>
+<section class="card">
+  <div class="hero"><div><small>EXKLUSIVES WOHNEN · BAAR</small><h1>Villa Sonnenberg</h1><div>Beispielobjekt für den Prototyp</div></div></div>
+  <div class="details">
+    <div class="price">CHF 4’850’000</div>
+    <div class="facts"><span>⌂ 6.5 Zimmer</span><span>▱ 260 m² Wohnfläche</span><span>▧ 820 m² Grundstück</span></div>
+    <p>Moderne Beispielvilla in ruhiger Lage mit Garten, Pool und Bergsicht. Alle Angaben sind fiktiv und dienen nur zur Demonstration.</p>
+    <span class="pill">Pool · Terrasse · 3 Parkplätze</span>
+  </div>
+  <div class="form">
+    <h3>Besichtigung anfragen</h3>
+    <label for="name">Name</label><input id="name" placeholder="Vor- und Nachname">
+    <label for="email">E-Mail</label><input id="email" type="email" placeholder="name@example.ch">
+    <label for="when">Wunschtermin (optional)</label><input id="when" placeholder="z. B. nächste Woche am Nachmittag">
+    <button onclick="requestVisit()">Anfrage vorbereiten</button>
+    <div id="formnote" style="font-size:12px;color:#61747d"></div>
+  </div>
+</section>
+<section class="card">
+  <div class="chathead"><span class="dot"></span><div><strong>PropPilot Assistent</strong><div style="font-size:12px;color:#61747d">Fragen zur Beispielimmobilie</div></div></div>
+  <div id="chat" class="chatbody"><div class="msg bot">Grüezi! Ich bin PropPilot, der virtuelle Immobilienassistent. Was möchten Sie über die Villa Sonnenberg wissen?</div></div>
+  <div class="quick">
+    <button onclick="ask('Wie hoch ist der Preis?')">Preis</button><button onclick="ask('Wie gross ist die Wohnfläche?')">Wohnfläche</button><button onclick="ask('Hat die Villa einen Pool?')">Pool</button><button onclick="ask('Ich möchte eine Besichtigung.')">Besichtigung</button>
+  </div>
+  <div class="controls"><input id="question" placeholder="Ihre Frage…" onkeydown="if(event.key==='Enter')send()"><button onclick="send()">Senden</button></div>
+</section>
+</main>
+<div class="notice">Prototyp: Antworten werden lokal anhand einfacher Regeln erzeugt; keine echte KI, keine Übermittlung oder Speicherung von Daten. Bitte keine echten personenbezogenen Daten eingeben. Das Objekt ist fiktiv.</div>
+<script>
+const facts={price:"Der Beispiel-Kaufpreis beträgt CHF 4’850’000.",rooms:"Die Villa hat 6.5 Zimmer.",area:"Die Wohnfläche beträgt 260 m²; das Grundstück umfasst 820 m².",pool:"Ja, laut den fiktiven Demo-Angaben gibt es einen privaten Pool.",view:"Die Demo beschreibt eine Bergsicht. Eine konkrete Aussicht oder Unverbaubarkeit ist nicht zugesichert.",parking:"Es gibt in den Demo-Angaben 3 Parkplätze.",visit:"Gerne können Sie unten im Formular eine Besichtigungsanfrage vorbereiten. Die Demo versendet sie nicht."};
+function add(text,who){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg '+who;d.textContent=text;c.appendChild(d);c.scrollTop=c.scrollHeight}
+function answer(q){let s=q.toLowerCase();
+if(/preis|kosten|kaufpreis/.test(s))return facts.price;
+if(/zimmer|raum/.test(s))return facts.rooms;
+if(/wohnfläche|fläche|grundstück|gross|größe|grösse/.test(s))return facts.area;
+if(/pool|schwimm/.test(s))return facts.pool;
+if(/sicht|aussicht|blick|berg|see/.test(s))return facts.view;
+if(/parkplatz|garage|parkieren/.test(s))return facts.parking;
+if(/besichtig|termin|besuchen/.test(s))return facts.visit;
+return "Dazu habe ich in den freigegebenen Demo-Objektdaten keine bestätigte Information. Ich kann die Frage für das Maklerteam notieren; bitte nutzen Sie für eine verbindliche Auskunft den direkten Kontakt zum Anbieter."}
+function ask(q){document.getElementById('question').value=q;send()}
+function send(){let el=document.getElementById('question'),q=el.value.trim();if(!q)return;add(q,'user');el.value='';setTimeout(()=>add(answer(q),'bot'),180)}
+function requestVisit(){let n=document.getElementById('name').value.trim(),e=document.getElementById('email').value.trim(),w=document.getElementById('when').value.trim(),note=document.getElementById('formnote');if(!n||!e||!e.includes('@')){note.textContent='Bitte Name und eine gültige E-Mail für die Demo eingeben.';return}note.textContent='Demo-Anfrage vorbereitet (nicht versendet).';add('Besichtigungsanfrage (Demo): '+n+' · '+e+(w?' · Wunsch: '+w:'' )+'. Hinweis: Diese Anfrage wurde nicht versendet.','bot')}
+</script>
+</body></html>
