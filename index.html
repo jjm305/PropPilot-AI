@@ -59,9 +59,9 @@ function add(text,who){const c=document.getElementById('chat');const d=document.
 function answer(q){
 let s=q.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"");
 if(/preis|kosten|kaufpreis|kostet|betrag/.test(s))return facts.price;
-if(/zimmer|raum|schlafzimmer|anzahl der zimmer/.test(s))return facts.rooms;
-if(/wohnflache|grundstuck|wie gross|wie groß|grosse|groesse|quadr(at|atmeter)|m²|qm/.test(s))return facts.area;
-if(/besichtig|termin|besuchen|besichtigungstermin/.test(s))return facts.visit;
+if(/zimmer|raum|schlafzimmer/.test(s))return facts.rooms;
+if(/wohnflache|grundstuck|wie gross|grosse|groesse|quadr(at|atmeter)|m2|qm/.test(s))return facts.area;
+if(/besichtig|termin|besuchen/.test(s))return facts.visit;
 if(/parkplatz|parkplatze|stellplatz|stellplatze|garage|parkieren|auto|fahrzeug|abstellplatz|abstellflache/.test(s))return facts.parking;
 if(/pool|schwimm|bad/.test(s))return facts.pool;
 if(/sicht|aussicht|blick|berg|see/.test(s))return facts.view;
